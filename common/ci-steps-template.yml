@@ -34,7 +34,8 @@ steps:
     export HELM_EXPERIMENTAL_OCI=1
     cd $(projectName)
     chartPackage=$(ls $(projectName)-$(helmChartVersion).tgz)
-    helm registry login $(registryServerName) --username $(registryLogin) --password $(registryPassword)
+    helm plugin install https://github.com/chartmuseum/helm-push
+    helm registry login $(registryServerName) --username $(registryLogin) --password $(registryPassword)    
     helm push $chartPackage oci://$registryServerName/helm
     echo $(jq -n --arg version "$(helmChartVersion)" '{helmChartVersion: $version}') > $(build.artifactStagingDirectory)/variables.json
   failOnStderr: true
