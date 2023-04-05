@@ -31,6 +31,7 @@ steps:
   failOnStderr: true
   displayName: 'helm package'
 - bash: |
+    export HELM_EXPERIMENTAL_OCI=1
     cd $(projectName)
     chartPackage=$(ls $(projectName)-$(helmChartVersion).tgz)
     helm registry login $(registryServerName) --username $(registryLogin) --password $(registryPassword)
