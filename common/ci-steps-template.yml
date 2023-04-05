@@ -8,7 +8,7 @@ steps:
   displayName: 'docker build'
 - bash: |
     echo '$(registryPassword)' | docker login \
-        $(C) \
+        $(registryServerName) \
         -u $(registryLogin) \
         --password-stdin
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
