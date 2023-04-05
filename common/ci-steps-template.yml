@@ -8,7 +8,7 @@ steps:
   displayName: 'docker build'
 - bash: |
     echo '$(registryPassword)' | docker login \
-        $(registryServerName) \
+        $(C) \
         -u $(registryLogin) \
         --password-stdin
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
@@ -33,11 +33,7 @@ steps:
 - bash: |
     cd $(projectName)
     chartPackage=$(ls $(projectName)-$(helmChartVersion).tgz)
-    az acr helm push \
-        -n $(registryName) \
-        -u $(registryLogin) \
-        -p '$(registryPassword)' \
-        $chartPackage
+    helm push $chartPackage oci://$registryServerName/helm
     echo $(jq -n --arg version "$(helmChartVersion)" '{helmChartVersion: $version}') > $(build.artifactStagingDirectory)/variables.json
   failOnStderr: true
   name: helmPush
