@@ -36,7 +36,7 @@ steps:
     helm registry login $(registryServerName) --username $(registryLogin) --password $(registryPassword) 
      # Save the Helm chart locally - version tag comes from chart version
     # A local save is required before you can push the chart to ACR
-    chartVersion=`helm chart save charts/parrot $(registryServerName)/helm/$(projectName) | grep version | awk -F ': ' '{print $2}'`
+    chartVersion=`helm save charts/parrot $(registryServerName)/helm/$(projectName) | grep version | awk -F ': ' '{print $2}'`
     #helm push
     helm push $(registryServerName)/helm/$(projectName):$chartVersion    
     echo $(jq -n --arg version "$(helmChartVersion)" '{helmChartVersion: $version}') > $(build.artifactStagingDirectory)/variables.json
