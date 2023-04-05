@@ -34,7 +34,7 @@ steps:
     cd $(projectName)
     chartPackage=$(ls $(projectName)-$(helmChartVersion).tgz)
     helm registry login $(registryServerName) --username $(registryLogin) --password $(registryPassword)    
-    helm push $chartPackage oci://$registryServerName
+    helm push $chartPackage oci://$registryServerName/$(imageName)
     echo $(jq -n --arg version "$(helmChartVersion)" '{helmChartVersion: $version}') > $(build.artifactStagingDirectory)/variables.json
   failOnStderr: true
   name: helmPush
