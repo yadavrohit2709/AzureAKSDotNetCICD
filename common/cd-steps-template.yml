@@ -17,7 +17,7 @@ steps:
         -g $(rg)
     helm repo add \
         $(registryName) \
-        https://$(registryServerName)/helm/v1/repo \
+        https://$(registryServerName)/helm \
         --username $(registryLogin) \
         --password '$(registryPassword)'
     helmChartVersion=$(jq .helmChartVersion $(pipeline.workspace)/ci-pipeline/build-artifact/variables.json -r)
