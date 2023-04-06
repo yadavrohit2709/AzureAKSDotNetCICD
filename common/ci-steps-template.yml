@@ -34,11 +34,11 @@ steps:
     cd $(projectName)
     chartPackage=$(ls $(projectName)-$(helmChartVersion).tgz)
     echo $chartPackage
-    helm registry login $(registryServerName) --username $(registryLogin) --password-stdin     
+    helm registry login $(registryServerName) --username $(registryLogin) --password $(registryPassword)      
     #helm push
     helm push $chartPackage oci://$(registryServerName)/helm    
     echo $(jq -n --arg version "$(helmChartVersion)" '{helmChartVersion: $version}') > $(build.artifactStagingDirectory)/variables.json
-  failOnStderr: true
+  failOnStderr: false
   name: helmPush
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
   displayName: 'az acr helm push'
