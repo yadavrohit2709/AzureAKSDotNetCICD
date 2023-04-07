@@ -28,5 +28,5 @@ steps:
         --set image.repository=$(registryServerName)/$(projectName) \
         --set-string image.tag=$helmChartVersion  \
         --set ingress.enabled=false 
-  failOnStderr: true
+  failOnStderr: false
   displayName: 'deploy helm chart'
