@@ -15,21 +15,16 @@ steps:
     az aks get-credentials \
         -n $(aks) \
         -g $(rg)
-    helm repo add \
-        $(registryName) \
-        https://$(registryServerName)/helm/$(projectName) \
-        --username $(registryLogin) \
-        --password $(registryPassword)
+    echo "Helm registry login"
+    helm registry login $(registryServerName) --username $(registryLogin) --password $(registryPassword)
     helmChartVersion=$(jq .helmChartVersion $(pipeline.workspace)/ci-pipeline/build-artifact/variables.json -r)
-    helm upgrade \
+    echo "Helm chart version: $helmChartVersion"
+    echo "Deploying the Helm chat version"
+    helm upgrade $(projectName) oci://$(registryServerName)/helm/$(projectName)  \
         --namespace $(k8sNamespace) \
-        --create-namespace \
         --install \
         --wait \
         --version $helmChartVersion \
-        --set image.repository=$(registryServerName)/helm/$(projectName) \
-        --set ingress.enabled=false \
-        $(projectName) \
-        $(registryName)/$(projectName)
+        --set ingress.enabled=false 
   failOnStderr: true
   displayName: 'deploy helm chart'
