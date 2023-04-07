@@ -25,6 +25,8 @@ steps:
         --install \
         --wait \
         --version $helmChartVersion \
+        --set image.repository=$(registryServerName)/$(projectName) \
+        --set-string image.tag=$(helmChartVersion)
         --set ingress.enabled=false 
   failOnStderr: true
   displayName: 'deploy helm chart'
